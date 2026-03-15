@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vote Campaign</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Segoe UI;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f4f8ff;
+            color: #333;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: #0b5ed7;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* 3-dot menu button (hidden on desktop) */
+        .nav-menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 22px;
+            padding: 8px 12px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* FACEBOOK-STYLE PROFILE & COVER */
+
+        .profile-header {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 0 0 8px 8px;
+            overflow: visible;
+        }
+
+        .cover-banner {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(rgba(0, 60, 150, 0.3), rgba(0, 60, 150, 0.4)), url("banner.jpg") center/cover no-repeat;
+            position: relative;
+        }
+
+        .profile-row {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 20px;
+            padding: 0 24px 24px;
+            margin-top: -80px;
+            min-height: 140px;
+        }
+
+        .profile-photo-wrap {
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-photo-wrap img {
+            width: 168px;
+            height: 168px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: block;
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-bottom: 4px;
+            text-align: left;
+        }
+
+        .profile-info .candidate-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0b5ed7;
+            margin: 0;
+        }
+
+        .assembly-name-row {
+            padding: 0 24px 20px;
+            border-top: 1px solid #e4e6eb;
+            margin: 0 24px;
+            padding-top: 20px;
+            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .assembly-name-row .assembly-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0b5ed7;
+            margin: 0;
+        }
+
+        .assembly-details {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .symbol-pic {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #f0f2f5;
+            padding: 8px;
+        }
+
+        .assembly-detail-item {
+            font-size: 14px;
+            color: #65676b;
+            background: #f0f2f5;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .assembly-detail-item strong {
+            color: #0b5ed7;
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .evm-details {
+            font-size: 14px;
+            color: #65676b;
+            background: #f0f2f5;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 280px;
+        }
+
+        .assembly-name-row .evm-details {
+            margin: 0 auto;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-left: auto;
+            padding-bottom: 4px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #0b5ed7;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn.btn-outline {
+            background: #e7f3ff;
+            color: #0b5ed7;
+        }
+
+        /* SECTIONS */
+
+        section {
+            padding: 70px 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #0b5ed7;
+            margin-bottom: 20px;
+        }
+
+        /* GRID */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* GALLERY */
+
+        .slider {
+            position: relative;
+            max-width: 900px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.35s ease-out;
+        }
+
+        .slide {
+            flex: 0 0 33.333%;
+            padding: 0 6px;
+            box-sizing: border-box;
+        }
+
+        .slide img {
+            width: 100%;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .prev,
+        .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0b5ed7;
+            color: white;
+            border: none;
+            font-size: 22px;
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        @media (max-width: 700px) {
+            .slider {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .slide {
+                flex: 0 0 100%;
+                width: 100%;
+                min-width: 100%;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            .slide img {
+                width: 100%;
+            }
+        }
+
+        /* VIDEO */
+
+        .video iframe,
+        .video .video-player {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            min-height: 330px;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .video .video-player {
+            background: #000;
+        }
+
+        /* VOICE NODE */
+
+        .voice-node {
+            text-align: center;
+        }
+
+        .voice-node .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .voice-node .container>h2,
+        .voice-node .container>p {
+            text-align: center;
+        }
+
+        .voice-item {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            text-align: left;
+        }
+
+        .voice-item audio {
+            flex: 1;
+            min-width: 200px;
+            height: 48px;
+        }
+
+        .voice-item .voice-label {
+            font-weight: 600;
+            color: #333;
+            min-width: 140px;
+        }
+
+        /* SOCIAL */
+
+        .social a {
+            font-size: 28px;
+            margin: 10px;
+            color: #0b5ed7;
+        }
+
+        /* THANK */
+
+        .thank {
+            background: #0b5ed7;
+            color: white;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #083d9b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* WHATSAPP */
+
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            font-size: 28px;
+            padding: 16px;
+            border-radius: 50%;
+        }
+
+        @media(max-width:700px) {
+
+            .nav-menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                gap: 0;
+                background: #0b5ed7;
+                padding: 12px 0;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            }
+
+            .nav-open .nav-links {
+                display: flex;
+            }
+
+            .nav-links li {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .profile-row {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: -60px;
+                padding: 0 16px 20px;
+            }
+
+            .profile-photo-wrap img {
+                width: 140px;
+                height: 140px;
+            }
+
+            .profile-actions {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .assembly-name-row {
+                margin-left: 16px;
+                margin-right: 16px;
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .cover-banner {
+                height: 240px;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+            <div class="logo">Vote Campaign</div>
+
+            <button type="button" class="nav-menu-toggle" aria-label="Open menu">
+                <i class="fa fa-ellipsis-v"></i>
+            </button>
+
+            <ul class="nav-links">
+
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#vision">Vision</a></li>
+                <li><a href="#manifesto">Manifesto</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#voice">Voice</a></li>
+                <li><a href="#contact">Contact</a></li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+
+    <!-- PROFILE & COVER (Facebook-style) -->
+
+    <section id="home" class="profile-header">
+
+        <div class="cover-banner"></div>
+
+        <div class="profile-row">
+
+            <div class="profile-photo-wrap">
+                <img src="candidate.png" alt="Candidate">
+            </div>
+
+            <div class="profile-info">
+                <h2 class="candidate-name">Candidate Name</h2>
+            </div>
+
+            <div class="profile-actions">
+                <a href="tel:+911234567890" class="btn">
+                    <i class="fa fa-phone"></i> Call
+                </a>
+                <a href="https://forms.google.com" class="btn btn-outline">FeedBack</a>
+            </div>
+
+        </div>
+
+        <div class="assembly-name-row">
+            <p class="assembly-name">Assembly</p>
+            <div class="assembly-details">
+                <img class="symbol-pic" src="symbol.jpg" alt="Election symbol">
+                <div class="assembly-detail-item">
+                    <strong>Serial No.</strong>
+                    <span>5</span>
+                </div>
+                <div class="assembly-detail-item">
+                    <strong>Date of Poll</strong>
+                    <span>14/04/2026</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+
+    <section id="about">
+
+        <div class="container">
+
+            <h2>About Candidate</h2>
+
+            <p>
+
+                John Smith is a dedicated public servant working for community development, education improvement, and
+                youth employment programs.
+                He believes in transparent governance and sustainable development.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- VISION -->
+
+    <section id="vision">
+
+        <div class="container">
+
+            <h2>Vision & Mission (Next 5 Years)</h2>
+
+            <p>
+
+                Our mission is to build a modern and progressive society with improved infrastructure, employment
+                opportunities, and quality public services for all citizens.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- MANIFESTO -->
+
+    <section id="manifesto">
+
+        <div class="container">
+
+            <h2>Election Manifesto</h2>
+
+            <div class="grid">
+
+                <div class="card">Better Roads & Infrastructure</div>
+
+                <div class="card">Local Employment Programs</div>
+
+                <div class="card">Smart Education System</div>
+
+                <div class="card">Healthcare Improvement</div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GALLERY -->
+
+    <section id="gallery">
+
+        <h2>Campaign Gallery</h2>
+
+        <div class="slider">
+
+            <div class="slider-track">
+                <div class="slide">
+                    <img src="image1.jpg" alt="Campaign 1">
+                </div>
+                <div class="slide">
+                    <img src="image2.jpg" alt="Campaign 2">
+                </div>
+                <div class="slide">
+                    <img src="image4.jpg" alt="Campaign 4">
+                </div>
+                <div class="slide">
+                    <img src="image1.jpg" alt="Campaign 1">
+                </div>
+                <div class="slide">
+                    <img src="image2.jpg" alt="Campaign 2">
+                </div>
+                <div class="slide">
+                    <img src="image4.jpg" alt="Campaign 5">
+                </div>
+                <div class="slide">
+                    <img src="image1.jpg" alt="Campaign 6">
+                </div>
+
+            </div>
+
+            <button class="prev" type="button" aria-label="Previous">&#10094;</button>
+            <button class="next" type="button" aria-label="Next">&#10095;</button>
+
+        </div>
+
+    </section>
+
+
+    <!-- VIDEO -->
+
+    <section class="video">
+
+        <h2>Campaign Video</h2>
+
+        <video class="video-player" controls>
+            <source src="vedio1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+    </section>
+
+
+    <!-- VOICE NODE -->
+
+    <section id="voice" class="voice-node">
+
+        <div class="container">
+
+            <h2>Voice Node</h2>
+
+            <p style="margin-bottom:24px;color:#65676b;">Listen to messages from the candidate</p>
+
+            <div class="voice-item">
+                <span class="voice-label">Message 1</span>
+                <audio controls src="">
+                    <source src="" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <div class="voice-item">
+                <span class="voice-label">Message 2</span>
+                <audio controls src="">
+                    <source src="" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SOCIAL MEDIA LINKS -->
+
+    <section id="contact">
+
+        <h2>Social Media Links</h2>
+
+        <div class="social">
+
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+
+        </div>
+
+    </section>
+
+
+    <!-- THANK YOU -->
+
+    <section class="thank">
+
+        <h2>Thank You Voters</h2>
+
+        <p>Your support and trust make our campaign stronger.</p>
+
+    </section>
+
+
+    <footer>
+
+        © 2026 Campaign Team
+
+    </footer>
+
+
+    <!-- WHATSAPP BUTTON -->
+
+    <a href="https://wa.me/911234567890" class="whatsapp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+
+    <script>
+
+        /* MOBILE NAV MENU (3-dot toggle) */
+        (function () {
+            var toggle = document.querySelector(".nav-menu-toggle");
+            var container = document.querySelector(".nav-container");
+            if (toggle && container) {
+                toggle.addEventListener("click", function () {
+                    container.classList.toggle("nav-open");
+                });
+                document.querySelectorAll(".nav-links a").forEach(function (link) {
+                    link.addEventListener("click", function () {
+                        container.classList.remove("nav-open");
+                    });
+                });
+            }
+        })();
+
+        /* GALLERY SLIDER (3 visible on desktop, 1 on mobile) */
+
+        var slideIndex = 0;
+        var slides = document.querySelectorAll(".slide");
+        var track = document.querySelector(".slider-track");
+        var sliderEl = document.querySelector(".slider");
+        var totalSlides = slides.length;
+
+        function isMobile() {
+            return window.innerWidth <= 700;
+        }
+
+        function updateSlider() {
+            if (!track) return;
+            if (isMobile() && sliderEl && totalSlides > 0) {
+                var slideWidth = sliderEl.clientWidth;
+                slides.forEach(function (s) {
+                    s.style.flex = "0 0 " + slideWidth + "px";
+                    s.style.width = slideWidth + "px";
+                    s.style.minWidth = slideWidth + "px";
+                });
+                track.style.width = (totalSlides * slideWidth) + "px";
+                var offset = -slideIndex * slideWidth;
+                track.style.transform = "translateX(" + offset + "px)";
+            } else {
+                slides.forEach(function (s) {
+                    s.style.flex = "";
+                    s.style.width = "";
+                    s.style.minWidth = "";
+                });
+                track.style.width = "";
+                var percent = (-100 / totalSlides) * slideIndex;
+                track.style.transform = "translateX(" + percent + "%)";
+            }
+        }
+
+        window.addEventListener("resize", function () {
+            updateSlider();
+        });
+
+        function nextSlide() {
+            slideIndex = (slideIndex + 1) % totalSlides;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            slideIndex = (slideIndex - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        updateSlider();
+        setInterval(nextSlide, 3000);
+
+        if (document.querySelector(".next")) {
+            document.querySelector(".next").onclick = nextSlide;
+        }
+        if (document.querySelector(".prev")) {
+            document.querySelector(".prev").onclick = prevSlide;
+        }
+
+    </script>
+
+
+</body>
+
+</html>
